@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:500px;
+    padding:20px;
+}
+
+.weather-card{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.search-box input{
+    flex:1;
+    height:45px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    padding-left:15px;
+    font-size:16px;
+}
+
+.search-box button{
+    border:none;
+    background:#ff6b81;
+    color:white;
+    padding:0 20px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.search-box button:hover{
+    background:#ff4757;
+}
+
+#city{
+    font-size:32px;
+    margin-bottom:5px;
+}
+
+#temp{
+    font-size:50px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:20px;
+}
+
+.box{
+    background:rgba(255,255,255,0.1);
+    padding:12px;
+    border-radius:12px;
+}
+
+#icon{
+    width:100px;
+    margin-top:10px;
+}
+</style>
+
+<body>
+
+  <div class="container">
+
+    <h1>🌦 Weather App</h1>
+
+    <div class="weather-card">
+
+        <div class="search-box">
+            <input id="cityname" type="text" placeholder="Enter city name">
+            <button id="btn">Search</button>
+        </div>
+
+        <h2 id="city">City Name</h2>
+        <h3 id="weather">Weather</h3>
+
+        <img id="icon" alt="Weather Icon">
+
+        <h1 id="temp">0°C</h1>
+
+        <div class="info">
+            <div class="box">
+                <h4>State</h4>
+                <p id="state">-</p>
+            </div>
+
+            <div class="box">
+                <h4>Country</h4>
+                <p id="count">-</p>
+            </div>
+
+            <div class="box">
+                <h4>Humidity</h4>
+                <p id="hum">-</p>
+            </div>
+
+            <div class="box">
+                <h4>Time</h4>
+                <p id="time">-</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+   <script>
+      const cityname = document.getElementById("cityname")
+      const button1 = document.getElementById("btn")
+      const city1 = document.getElementById("city")
+      const state = document.getElementById("state")
+      const country = document.getElementById("count")
+      const temp = document.getElementById("temp")
+      const time = document.getElementById("time")
+      const humidity = document.getElementById("hum")
+      const weather = document.getElementById("weather")
+      const icon = document.getElementById("icon")
+
+
+      button1.addEventListener('click', async () => {
+         //console.log(cityname.value)
+         let city = cityname.value
+         let res = await getdata(city)
+         city1.innerText = res.location.name;
+         state.innerText = res.location.region;
+         country.innerText = res.location.country;
+         temp.innerText = res.current.temp_c;
+         time.innerText = res.location.localtime;
+         humidity.innerText = res.current.humidity;
+         weather.innerText = res.current.condition.text;
+         icon.src = "https:" + res.current.condition.icon;
+
+      })
+
+      async function getdata(cityn) {
+         const result = await fetch(`https://api.weatherapi.com/v1/current.json?key=c3b27294fe514cec99a44647252509&q=${cityn}&aqi=yes`)
+         //console.log(await result.json())
+         return await result.json()
+      }
+   </script>
+</body>
+
+</html> 
